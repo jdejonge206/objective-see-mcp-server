@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "objective-see": {
+      "command": "node",
+      "args": ["/ABSOLUTE/PATH/TO/objective-see-mcp-server/dist/index.js"],
+      "env": {
+        "OS_APPS_DIR": "/Applications",
+        "OS_INSTALLERS_DIR": "/Users/jdejonge/Downloads/Applications/Security/packages and installers",
+        "OS_USE_SUDO": "true"
+      }
+    }
+  }
+}
