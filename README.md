@@ -1,12 +1,14 @@
-# objective-see-mcp-server
+# Objective-MSeeP-Server <img src=https://objective-see.org/images/logoApple.png style="width:50px;height:50px"><span style=color:#95c02d;font-size:15px>®</span>
 
-# *Currently Broken*: 
+
+# *Current Integration Status*: 
 [ `June 20, 2026 at 2:01:10 AM EDT` ]
 
 |Application |Status|                             
 -------------|------|                                                      
 |DNSMonitor  |❌    |                                       
 |FileMonitor |❌    |
+|Everything Else| ✅|
 
 |Problem: |Resoultion:               
 -------------|------
