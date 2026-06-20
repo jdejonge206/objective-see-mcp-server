@@ -172,6 +172,11 @@ src/
     schedule.ts       schedule / list / unschedule (launchd)
 ```
 ----
+<span style="color: #798992;">-See</span>
+
+<div style="color: #798992; font-size: 18px; font-weight: 300; padding-left: 3px; margin-top: -2px;">
+                     a non-profit 501(c)(3) foundation.
+                    </div>
 
 <span style='text-align:center'> <p>All Credit Goes To: <a href="https://objective-see.org/" target="_blank">Patrick Wardle</a> </p> </span>
  
