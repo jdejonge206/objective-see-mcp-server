@@ -1,4 +1,4 @@
-# Objective-MSeeP-Server <img src=https://objective-see.org/images/logoApple.png style="width:50px;height:50px"><span style=color:#95c02d;font-size:15px>®</span>
+# Objective-MCP-Server <img src=https://objective-see.org/images/logoApple.png style="width:50px;height:50px"><span style=color:#95c02d;font-size:15px>®</span>
 
 
 # *Current Integration Status*: 
