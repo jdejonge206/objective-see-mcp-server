@@ -1,6 +1,7 @@
 # objective-see-mcp-server
 
-# *Currently Broken*: [ `June 20, 2026 at 2:01:10 AM EDT` ]
+# *Currently Broken*: 
+[ `June 20, 2026 at 2:01:10 AM EDT` ]
 
 |Application |Status|                             
 -------------|------|                                                      
