@@ -1,5 +1,26 @@
 # objective-see-mcp-server
 
+# *Currently Broken*: [ `June 20, 2026 at 2:01:10 AM EDT` ]
+
+|Application |Status|                             
+-------------|------|                                                      
+|DNSMonitor  |❌    |                                       
+|FileMonitor |❌    |
+
+|Problem: |Resoultion:               
+-------------|------
+|Root Access  |[ DNSMonitor/FileMonitor] Captures Are Noted Out Of The Prompts: [Not Deleted As Concepts]
+                                                                          
+Both run only the tools that work without root, so the reports will be clean. The *DNSMonitor/FileMonitor* captures are *noted* out of the prompts *(not deleted as a concept)* — my [sudoers] rule is still in place and correct, the only remaining piece is running that MCP server outside the app sandbox. 
+
+Nothing to redo.
+
+---
+
+# Readme: Please Read Below!
+
+## What is this?
+
 An MCP server that wraps [Patrick Wardle's Objective-See](https://objective-see.org) macOS
 security tools so an AI agent (Claude Desktop, Claude Code, etc.) can run scans, capture
 event streams, launch/install the GUI tools, and put recurring scans on a schedule.
@@ -98,7 +119,7 @@ you keep the `… Installer.app` bundles. The standalone scanner/monitor apps ar
 | Var | Default | Purpose |
 |-----|---------|---------|
 | `OS_APPS_DIR` | `/Applications` | Where the standalone `.app` bundles live |
-| `OS_INSTALLERS_DIR` | = `OS_APPS_DIR` | Where the `… Installer.app` wrappers live |
+| `OS_INSTALLERS_DIR` | `=` `OS_APPS_DIR` | Where the `… Installer.app` wrappers live |
 | `OS_USE_SUDO` | `true` | Set `false` if the server itself runs as root |
 | `OS_LAUNCH_AGENTS_DIR` | `~/Library/LaunchAgents` | Where scheduled-scan plists are written |
 | `OS_SCAN_LOG_DIR` | `~/Library/Logs/objective-see-mcp` | Where scheduled-scan JSON logs go |
@@ -150,3 +171,8 @@ src/
     control.ts        status / launch / install / uninstall
     schedule.ts       schedule / list / unschedule (launchd)
 ```
+----
+
+<span style='text-align:center'> <p>All Credit Goes To: <a href="https://objective-see.org/" target="_blank">Patrick Wardle</a> </p> </span>
+ 
+ <span style='text-align:center'> <img src=https://objective-see.org/images/logoApple.png> </span>
