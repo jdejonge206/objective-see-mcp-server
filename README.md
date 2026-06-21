@@ -20,6 +20,10 @@ Nothing to redo.
 
 ---
 
+📍 **Roadmap:** see [`docs/ROADMAP.md`](docs/ROADMAP.md) for planned work — privilege integration (unblocking the root-only tools) and headless facsimiles of the GUI-only tools.
+
+---
+
 # Readme: Please Read Below!
 
 ## What is this?
