@@ -68,7 +68,7 @@ what `os_schedule_scan` covers.
 
 **Scanners (read-only, run as your user; richer with `use_sudo`)**
 - `knockknock_scan` — `{ include_apple?, use_sudo?, timeout_seconds? }`
-- `taskexplorer_scan` — `{ pid?, include_apple?, use_sudo?, timeout_seconds? }`
+- `taskexplorer_scan` — `{ pid?, include_apple?, skip_vt?, use_sudo?, timeout_seconds? }` (`skip_vt` defaults **true**: VirusTotal lookups on every task stall on the public-API rate limit, so the default uses `-explore -skipVT`; set `skip_vt:false` only for a single-`pid` scan)
 - `netiquette_list` — `{ skip_apple?, use_sudo?, timeout_seconds? }`
 
 **Monitors (need root + Endpoint Security approval; bounded capture window)**
@@ -141,17 +141,22 @@ These are real security tools, so macOS gates them:
 2. **Endpoint Security / approval** — the three monitors and several daemons require a system
    approval the first time. Launch each once from the GUI (`os_launch_tool`) and approve the
    prompt before driving it headlessly.
-3. **Root for monitors** — FileMonitor / ProcessMonitor / DNSMonitor must run as root. The
-   server uses `sudo -n` (non-interactive). Pick one:
+3. **Root for monitors (and full TaskExplorer detail)** — FileMonitor / ProcessMonitor /
+   DNSMonitor must run as root, and TaskExplorer requires root for a complete scan (it exits with
+   `requires root` otherwise). The server uses `sudo -n` (non-interactive) whenever a call passes
+   `use_sudo=true`. Pick one:
    - run the MCP server as root and set `OS_USE_SUDO=false`, **or**
-   - add a passwordless sudoers rule (run `sudo visudo`, adjust paths):
+   - add a passwordless sudoers rule (run `sudo visudo`, adjust the username and paths):
      ```
-     your_user ALL=(root) NOPASSWD: /Applications/FileMonitor.app/Contents/MacOS/FileMonitor, \
+     your_user ALL=(root) NOPASSWD: /Applications/TaskExplorer.app/Contents/MacOS/TaskExplorer, \
+       /Applications/FileMonitor.app/Contents/MacOS/FileMonitor, \
        /Applications/ProcessMonitor.app/Contents/MacOS/ProcessMonitor, \
        /Applications/DNSMonitor.app/Contents/MacOS/DNSMonitor
      ```
-   If passwordless sudo isn't available, the affected tools return a clear, actionable error
-   instead of hanging.
+   Because the rule pins each tool to its absolute binary path, this grants passwordless root
+   *only* to those specific Objective-See executables — nothing else. After saving, call
+   `taskexplorer_scan` with `use_sudo=true`. If passwordless sudo isn't available, the affected
+   tools return a clear, actionable error instead of hanging.
 
 ## Notes & limitations
 

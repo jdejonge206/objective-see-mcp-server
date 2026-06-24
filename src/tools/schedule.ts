@@ -79,7 +79,10 @@ export function registerSchedule(server: McpServer): void {
       const logFile = join(SCAN_LOG_DIR, `${label}.log`);
       const errFile = join(SCAN_LOG_DIR, `${label}.err.log`);
 
-      const scanArgs = [...(app.baseArgs ?? [])];
+      // TaskExplorer's default '-scan' queries VirusTotal on every task, which stalls on the
+      // public-API rate limit and would hang the scheduled run indefinitely. Use the same
+      // '-explore -skipVT' enumeration the interactive tool defaults to.
+      const scanArgs = tool === "taskexplorer" ? ["-explore", "-skipVT"] : [...(app.baseArgs ?? [])];
       if (include_apple && (tool === "knockknock" || tool === "taskexplorer")) scanArgs.push("-apple");
       // Wrap so each run is timestamped and appended.
       const inner =

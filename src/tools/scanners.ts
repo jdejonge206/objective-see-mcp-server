@@ -14,12 +14,18 @@ const notInstalled = (name: string) =>
       `(or set OS_APPS_DIR), then retry. Use os_status to see what's detected.`
   );
 
-async function runScanner(key: string, extraArgs: string[], useSudo: boolean, timeoutSec: number) {
+async function runScanner(
+  key: string,
+  extraArgs: string[],
+  useSudo: boolean,
+  timeoutSec: number,
+  baseOverride?: string[]
+) {
   const app = APP_BY_KEY[key];
   const bin = resolveBinary(app);
   if (!bin) return notInstalled(app.name);
 
-  const args = [...(app.baseArgs ?? []), ...extraArgs];
+  const args = [...(baseOverride ?? app.baseArgs ?? []), ...extraArgs];
   const res = await runCommand(bin, args, { sudo: useSudo, timeoutMs: timeoutSec * 1000 });
 
   if (res.timedOut) return errorResult(`${app.name} timed out after ${timeoutSec}s. Try a larger timeout_seconds.`);
@@ -69,22 +75,35 @@ export function registerScanners(server: McpServer): void {
       description:
         "Run TaskExplorer to enumerate running tasks with rich metadata: path, pid, command line, hashes, " +
         "code signatures, VirusTotal detection ratios, loaded dylibs, open files, and network connections. " +
-        "Args: pid (optional, scan a single process); include_apple (bool, default false); use_sudo (bool, " +
-        "default false, recommended for full dylib/file/connection detail); timeout_seconds (10-600). " +
+        "Args: pid (optional, scan a single process); include_apple (bool, default false); skip_vt (bool, " +
+        "default true — skip VirusTotal lookups; querying VT on every task stalls on the public-API rate " +
+        "limit, so this is on by default and runs via '-explore'); use_sudo (bool, default false, " +
+        "recommended/required — TaskExplorer needs root for a full scan); timeout_seconds (10-600). " +
         "Read-only. Returns { tool, result } with the parsed JSON.",
       inputSchema: {
         pid: z.number().int().min(0).optional().describe("Limit the scan to a single process id."),
         include_apple: z.boolean().default(false).describe("Include Apple-signed processes."),
-        use_sudo: z.boolean().default(false).describe("Run via sudo -n for full detail."),
+        skip_vt: z
+          .boolean()
+          .default(true)
+          .describe(
+            "Skip VirusTotal lookups (uses '-explore -skipVT'). Strongly recommended: VT queries on every " +
+              "task stall on the public-API rate limit and will time out. Set false only for a small/single-pid scan."
+          ),
+        use_sudo: z.boolean().default(false).describe("Run via sudo -n; required for a full scan (TaskExplorer needs root)."),
         timeout_seconds: z.number().int().min(10).max(600).default(240).describe("Max seconds to wait.")
       },
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },
-    async ({ pid, include_apple, use_sudo, timeout_seconds }) => {
+    async ({ pid, include_apple, skip_vt, use_sudo, timeout_seconds }) => {
       const extra: string[] = [];
       if (typeof pid === "number") extra.push("-pid", String(pid));
       if (include_apple) extra.push("-apple");
-      return runScanner("taskexplorer", extra, use_sudo, timeout_seconds);
+      // VirusTotal querying on a full task list crawls against the public-API rate
+      // limit; when skipping it we use '-explore' (full enumeration) + '-skipVT',
+      // the combination verified to complete in seconds. Otherwise keep '-scan'.
+      const baseOverride = skip_vt ? ["-explore", "-skipVT"] : undefined;
+      return runScanner("taskexplorer", extra, use_sudo, timeout_seconds, baseOverride);
     }
   );
 
