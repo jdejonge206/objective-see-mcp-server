@@ -15,7 +15,7 @@ privileged tools **already exists and is registered** — the gap is operational
 |------|------|----------------|-------------|---------|
 | KnockKnock | snapshot | yes | **yes** | Full Disk Access granted ✓ |
 | Netiquette | snapshot | yes | yes (user) | none |
-| TaskExplorer | snapshot | yes | **no** | needs root; `sudo -n` refused |
+| TaskExplorer | snapshot | yes | **ostensibly** | needs to be double checked :: needs root; `sudo -n` refused |
 | FileMonitor | monitor | yes | **no** | needs root **and** Endpoint Security approval |
 | ProcessMonitor | monitor | yes (not installed) | **no** | not installed; needs root + ES approval |
 | DNSMonitor | monitor | yes | **no** | needs root **and** a system/network-extension approval |
